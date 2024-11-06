@@ -56,8 +56,8 @@ public class Utilities {
     }
 
     public boolean validasiTidakNull(JComboBox combobox, String nama) {
-        var idx = combobox.getSelectedIndex();
-        if (idx == -1 || idx > (combobox.getModel().getSize() - 1)) {
+        var item = combobox.getSelectedItem();
+        if (item == null) {
             this.showErrorDialog("inputan pilihan " + nama + " belum dipilih!");
             return true;
         }
@@ -86,5 +86,13 @@ public class Utilities {
         if (!this.silent) {
             JOptionPane.showMessageDialog(parent, pesan, "info", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+    
+    public String showInputDialog(String pesan) {
+        if (!this.silent) {
+            return JOptionPane.showInputDialog(parent, pesan);
+        }
+        
+        return "";
     }
 }

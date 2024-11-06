@@ -1,3 +1,6 @@
+
+import javax.swing.DefaultListModel;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -14,7 +17,7 @@ public class JFrameAplikasiPerhitunganDiskon extends javax.swing.JFrame {
      */
     public JFrameAplikasiPerhitunganDiskon() {
         initComponents();
-        
+
         this.setLocationRelativeTo(null);
     }
 
@@ -34,9 +37,14 @@ public class JFrameAplikasiPerhitunganDiskon extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
+        jSlider1 = new javax.swing.JSlider();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        getContentPane().setLayout(new java.awt.BorderLayout(0, 4));
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
@@ -65,7 +73,7 @@ public class JFrameAplikasiPerhitunganDiskon extends javax.swing.JFrame {
         jComboBox1.setSelectedIndex(-1);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanel1.add(jComboBox1, gridBagConstraints);
@@ -78,12 +86,35 @@ public class JFrameAplikasiPerhitunganDiskon extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanel1.add(jButton1, gridBagConstraints);
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        jSlider1.setPreferredSize(new java.awt.Dimension(100, 20));
+        jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSlider1StateChanged(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel1.add(jSlider1, gridBagConstraints);
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.NORTH);
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Riwayat perhitungan", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.BELOW_TOP));
+        jPanel2.setLayout(new java.awt.BorderLayout(0, 4));
+
+        jList1.setModel(new DefaultListModel());
+        jScrollPane1.setViewportView(jList1);
+
+        jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -94,23 +125,75 @@ public class JFrameAplikasiPerhitunganDiskon extends javax.swing.JFrame {
                 || utils.validasiTidakNull(jComboBox1, "diskon")) {
             return;
         }
-        
+
         var text = jTextField1.getText();
         try {
             var harga = Double.parseDouble(text);
             var diskon = Integer.valueOf(
                     (String) jComboBox1.getSelectedItem()
             );
-            
-            var hargaAkhir = harga - (harga * diskon / 100);
+
+            var kupon = utils.showInputDialog("masukkan kupon diskon (bila ada)");
+            var diskonKupon = this.cekKupon(kupon);
+
+            var diskonAkhir = Math.min(100, diskon + diskonKupon);
+            var hargaAkhir = harga - (harga * diskonAkhir / 100);
             var totalHemat = harga - hargaAkhir;
-            utils.showInformationDialog(""
-                    + "Harga akhir Rp. " + hargaAkhir + "\n"
-                    + "Total hemat Rp. " + totalHemat);
+            
+            var sb = new StringBuilder();
+            sb.append("Harga akhir Rp. ").append(hargaAkhir).append("\n");
+            sb.append("Total hemat Rp. ").append(totalHemat).append("\n");
+            sb.append("Diskon -").append(diskon).append("%");
+            if (diskonKupon > 0) {
+                sb.append("\nDiskon kupon -").append(diskonKupon).append("%");
+            }
+            
+            utils.showInformationDialog(sb.toString());
+            
+            sb.setLength(0);
+            sb.append("harga: Rp. ")
+                    .append(harga)
+                    .append(" | diskon: ")
+                    .append(diskon).append("%");
+            if (!kupon.isBlank()) {
+                sb.append(" | kupon: \"")
+                        .append(kupon.trim().toUpperCase())
+                        .append("\"");
+                
+                if (diskonKupon > 0) {
+                    sb.append(" | diskon kupon: ")
+                            .append(diskonKupon).append("%");
+                }
+            }
+            sb.append(" | harga akhir: Rp. ")
+                    .append(hargaAkhir);
+            
+            var model = (DefaultListModel) jList1.getModel();
+            model.addElement(sb.toString());
         } catch (java.lang.NumberFormatException e) {
             utils.showErrorDialog("inputan harga harus dalam bentuk angka!");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
+        var diskon = String.valueOf(jSlider1.getValue());
+        jComboBox1.setEditable(true);
+        jComboBox1.setSelectedItem(diskon);
+        jComboBox1.setEditable(false);
+    }//GEN-LAST:event_jSlider1StateChanged
+
+    private Integer cekKupon(String kupon) {
+        switch (kupon.toUpperCase()) {
+            case "GRATIS":
+                return 100;
+
+            case "241111":
+                return 11;
+
+            default:
+                return 0;
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -152,7 +235,11 @@ public class JFrameAplikasiPerhitunganDiskon extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSlider jSlider1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
