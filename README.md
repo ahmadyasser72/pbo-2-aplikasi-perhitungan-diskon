@@ -1,5 +1,54 @@
 # Tugas 3 - Aplikasi Perhitungan Diskon ([screenshot](#screenshot))
 
+# JFrameAplikasiPerhitunganDiskon
+
+Aplikasi ini adalah aplikasi **Java Swing** sederhana yang menghitung harga akhir setelah diskon diterapkan. Pengguna dapat memasukkan harga barang, memilih atau mengatur persentase diskon, dan menambahkan kupon diskon opsional untuk mendapatkan hasil perhitungan secara akurat. Hasil akhir dan riwayat perhitungan ditampilkan pada daftar untuk referensi pengguna.
+
+## Fitur
+- **Input harga barang**: Memungkinkan pengguna untuk memasukkan harga barang yang ingin dihitung.
+- **Pilihan diskon**: Diskon dapat dipilih melalui kotak pilihan atau disesuaikan dengan slider.
+- **Kupon diskon**: Pengguna dapat memasukkan kode kupon yang secara otomatis diterapkan pada harga akhir.
+- **Riwayat perhitungan**: Semua perhitungan ditampilkan pada panel riwayat, memungkinkan pengguna untuk melihat ringkasan perhitungan sebelumnya.
+  
+## Prasyarat
+- **Java Development Kit (JDK)** versi 8 atau lebih tinggi.
+- **NetBeans IDE** atau IDE lain yang mendukung GUI Swing Java.
+
+## Menjalankan Aplikasi
+1. **Clone** atau **download** repositori ini.
+2. Buka proyek di **NetBeans IDE** atau IDE Java pilihan Anda.
+3. Jalankan kelas `JFrameAplikasiPerhitunganDiskon` untuk membuka aplikasi.
+
+## Cara Penggunaan
+1. Masukkan **harga** barang di kotak input harga.
+2. Pilih **diskon** yang diinginkan menggunakan kotak pilihan atau sesuaikan dengan slider.
+3. Klik tombol **"Hitung"** untuk memproses harga setelah diskon.
+4. Jika ada, masukkan **kode kupon** untuk diskon tambahan.
+5. Hasil perhitungan akan muncul dalam dialog, dan ringkasan hasil akan disimpan di panel **riwayat perhitungan**.
+
+## Contoh Output
+- **Input**: Harga = `100000`, Diskon = `10%`, Kupon = `GRATIS`
+  - **Output Dialog**:
+    ```
+    Harga akhir Rp. 0
+    Total hemat Rp. 100000
+    Diskon -10%
+    Diskon kupon -100%
+    ```
+
+   - **Ringkasan Riwayat**:
+      ```
+      harga: Rp. 100000 | diskon: 10% | kupon: "GRATIS" | diskon kupon: 100% | harga akhir: Rp. 0
+      ```
+
+## Struktur Kode
+
+- **jButton1ActionPerformed**: Mengambil harga dan diskon yang dipilih, kemudian menghitung harga akhir dan menampilkan hasilnya.
+- **cekKupon**: Mengecek dan mengembalikan nilai diskon berdasarkan kode kupon.
+- **jSlider1StateChanged**: Menyesuaikan pilihan diskon di kotak pilihan sesuai dengan nilai slider.
+
+## Detail tugas
+
 1. Deskripsi Program:
 
    - Pengguna memasukkan harga asli dan memilih persentase diskon
